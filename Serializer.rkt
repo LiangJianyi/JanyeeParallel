@@ -19,7 +19,7 @@
         (let ((val (apply p args)))
           (mutex 'release)
           val))
-      (cons serialized-p mutex))))
+      serialized-p)))
 
 (define (make-mutex)
   (let ((cell (mlist false)))
