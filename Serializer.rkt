@@ -16,6 +16,8 @@
     (lambda (p)
       (define (serialized-p . args)
         (mutex 'acquire)
+        ;(fprintf (current-output-port) "mutex of ~a: ~a\n" (list-ref args 0) (mutex 'display)) ;test
+        ;(set! args null) ;test
         (let ((val (apply p args)))
           (mutex 'release)
           val))
@@ -28,7 +30,8 @@
              ;; true if already set, false once set
              (if (test-and-set! cell) 
                  (the-mutex 'acquire) ;; retry, causing "blocking"
-                 false)) 
+                 false))
+            ((eq? m 'display) (mcar cell)) ;test
             ((eq? m 'release) (clear! cell))))
     the-mutex))
 
